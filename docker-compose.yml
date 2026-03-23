@@ -1,7 +1,6 @@
 # Media Server Stack for Coolify
 # Services: Jellyfin, Sonarr, Radarr, Prowlarr, qBittorrent, Bazarr, Seerr
-# Proxy: Use Coolify's built-in nginx (no Caddy needed)
-# Set env vars in Coolify domain config for each service URL
+# Using host network so services detect external URL from Host header directly
 
 services:
   jellyfin:
@@ -11,15 +10,13 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/Amsterdam}
-      - JELLYFIN_PublishedServerUrl=${SERVICE_URL_JELLYFIN}
     volumes:
       - ./jellyfin:/config
       - ./media:/media
     ports:
       - "8096:8096"
     restart: unless-stopped
-    networks:
-      - proxy
+    network_mode: host
 
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
@@ -28,15 +25,13 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/Amsterdam}
-      - SONARR_APPLICATION_URL=${SERVICE_URL_SONARR}
     volumes:
       - ./sonarr:/config
       - ./media:/media
     ports:
       - "8989:8989"
     restart: unless-stopped
-    networks:
-      - proxy
+    network_mode: host
     depends_on:
       - qbittorrent
 
@@ -47,15 +42,13 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/Amsterdam}
-      - RADARR_APPLICATION_URL=${SERVICE_URL_RADARR}
     volumes:
       - ./radarr:/config
       - ./media:/media
     ports:
       - "7878:7878"
     restart: unless-stopped
-    networks:
-      - proxy
+    network_mode: host
     depends_on:
       - qbittorrent
 
@@ -72,8 +65,7 @@ services:
     ports:
       - "9696:9696"
     restart: unless-stopped
-    networks:
-      - proxy
+    network_mode: host
 
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
@@ -91,8 +83,7 @@ services:
       - "6881:6881"
       - "6881:6881/udp"
     restart: unless-stopped
-    networks:
-      - proxy
+    network_mode: host
 
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
@@ -101,13 +92,11 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/Amsterdam}
-      - BAZARR_APPLICATION_URL=${SERVICE_URL_BAZARR}
     volumes:
       - ./bazarr:/config
       - ./media:/media
     restart: unless-stopped
-    networks:
-      - proxy
+    network_mode: host
 
   seerr:
     image: ghcr.io/seerr-team/seerr:latest
@@ -116,17 +105,11 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/Amsterdam}
-      - SEERR_APPLICATION_URL=${SERVICE_URL_SEERR}
     volumes:
       - ./seerr:/app/config
     ports:
       - "4535:4535"
     restart: unless-stopped
-    networks:
-      - proxy
+    network_mode: host
     depends_on:
       - jellyfin
-
-networks:
-  proxy:
-    driver: bridge
