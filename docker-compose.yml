@@ -1,6 +1,6 @@
 # Media Server Stack for Coolify
 # Services: Jellyfin, Sonarr, Radarr, Prowlarr, qBittorrent, Bazarr, Seerr
-# Coolify uses Traefik — containers need Traefik labels to be discovered
+# Using bridge network with Coolify's proxy network
 
 services:
   jellyfin:
@@ -10,13 +10,12 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/Amsterdam}
+      - JELLYFIN_PublishedServerUrl=${JELLYFIN_URL:-https://jf.vandijk.one}
     volumes:
       - ./jellyfin:/config
       - ./media:/media
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.jellyfin.rule=Host(`${JELLYFIN_DOMAIN}`)"
-      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
+    ports:
+      - "8096:8096"
     restart: unless-stopped
     networks:
       - coolify
@@ -28,13 +27,12 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/Amsterdam}
+      - SONARR_APPLICATION_URL=${SONARR_URL:-https://tn11egkgjmfboydd2wu6uhyh.vandijk.one}
     volumes:
       - ./sonarr:/config
       - ./media:/media
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.sonarr.rule=Host(`${SONARR_DOMAIN}`)"
-      - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
+    ports:
+      - "8989:8989"
     restart: unless-stopped
     networks:
       - coolify
@@ -48,13 +46,12 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/Amsterdam}
+      - RADARR_APPLICATION_URL=${RADARR_URL:-https://tkwvx21w8wjhbj713pck2hfd.vandijk.one}
     volumes:
       - ./radarr:/config
       - ./media:/media
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.radarr.rule=Host(`${RADARR_DOMAIN}`)"
-      - "traefik.http.services.radarr.loadbalancer.server.port=7878"
+    ports:
+      - "7878:7878"
     restart: unless-stopped
     networks:
       - coolify
@@ -71,10 +68,8 @@ services:
     volumes:
       - ./prowlarr:/config
       - ./media:/media
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.prowlarr.rule=Host(`${PROWLARR_DOMAIN}`)"
-      - "traefik.http.services.prowlarr.loadbalancer.server.port=9696"
+    ports:
+      - "9696:9696"
     restart: unless-stopped
     networks:
       - coolify
@@ -90,10 +85,10 @@ services:
     volumes:
       - ./qbittorrent:/config
       - ./downloads:/downloads
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.qbittorrent.rule=Host(`${QBITTORRENT_DOMAIN}`)"
-      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
+    ports:
+      - "9080:8080"
+      - "6881:6881"
+      - "6881:6881/udp"
     restart: unless-stopped
     networks:
       - coolify
@@ -105,13 +100,10 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/Amsterdam}
+      - BAZARR_APPLICATION_URL=${BAZARR_URL:-https://tk5o9k70ek0bkznk9hpke6yg.vandijk.one}
     volumes:
       - ./bazarr:/config
       - ./media:/media
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.bazarr.rule=Host(`${BAZARR_DOMAIN}`)"
-      - "traefik.http.services.bazarr.loadbalancer.server.port=6767"
     restart: unless-stopped
     networks:
       - coolify
@@ -119,16 +111,15 @@ services:
   seerr:
     image: ghcr.io/seerr-team/seerr:latest
     container_name: seerr
+    init: true
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/Amsterdam}
     volumes:
       - ./seerr:/app/config
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.seerr.rule=Host(`${SEERR_DOMAIN}`)"
-      - "traefik.http.services.seerr.loadbalancer.server.port=4535"
+    ports:
+      - "4535:4535"
     restart: unless-stopped
     networks:
       - coolify
