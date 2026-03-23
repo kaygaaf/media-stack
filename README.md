@@ -7,7 +7,7 @@
 | Sonarr | 8989 | TV show management |
 | Radarr | 7878 | Movie management |
 | Prowlarr | 9696 | Indexer management |
-| qBittorrent | 8080 | Download client |
+| qBittorrent | 9080 | Download client |
 | Bazarr | 6767 | Subtitle management |
 | Seerr | 4535 | Request management UI |
 
