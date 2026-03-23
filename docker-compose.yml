@@ -1,7 +1,7 @@
 # Media Server Stack for Coolify
 # Services: Jellyfin, Sonarr, Radarr, Prowlarr, qBittorrent, Bazarr, Seerr
 # Proxy: Use Coolify's built-in nginx (no Caddy needed)
-# Set env vars in Coolify: JELLYFIN_PUBLISHED_URL, JELLYFIN_HOST
+# Set env vars in Coolify domain config for each service URL
 
 services:
   jellyfin:
@@ -11,7 +11,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/Amsterdam}
-      - JELLYFIN_PublishedServerUrl=${JELLYFIN_PUBLISHED_URL}
+      - JELLYFIN_PublishedServerUrl=${JELLYFIN_URL}
     volumes:
       - ./jellyfin:/config
       - ./media:/media
@@ -28,6 +28,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/Amsterdam}
+      - SONARR_APPLICATION_URL=${SONARR_URL}
     volumes:
       - ./sonarr:/config
       - ./media:/media
@@ -46,6 +47,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/Amsterdam}
+      - RADARR_APPLICATION_URL=${RADARR_URL}
     volumes:
       - ./radarr:/config
       - ./media:/media
@@ -99,6 +101,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/Amsterdam}
+      - BAZARR_APPLICATION_URL=${BAZARR_URL}
     volumes:
       - ./bazarr:/config
       - ./media:/media
@@ -113,6 +116,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/Amsterdam}
+      - SEERR_APPLICATION_URL=${SEERR_URL}
     volumes:
       - ./seerr:/app/config
     ports:
