@@ -1,5 +1,5 @@
 # Media Server Stack for Coolify
-# Using coolify external network for Traefik routing
+# Using host network for inter-service communication
 
 services:
   jellyfin:
@@ -9,15 +9,12 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Amsterdam
-      - JELLYFIN_PublishedServerUrl=${JELLYFIN_PUBLISHED_SERVER_URL}
+      - JELLYFIN_PublishedServerUrl=${SERVICE_URL_JELLYFIN:-https://jf.vandijk.one/}
     volumes:
       - ./jellyfin:/config
       - ./media:/media
-    ports:
-      - "8096:8096"
     restart: unless-stopped
-    networks:
-      - coolify
+    network_mode: host
 
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
@@ -29,13 +26,8 @@ services:
     volumes:
       - ./sonarr:/config
       - ./media:/media
-    ports:
-      - "8989:8989"
     restart: unless-stopped
-    networks:
-      - coolify
-    depends_on:
-      - qbittorrent
+    network_mode: host
 
   radarr:
     image: lscr.io/linuxserver/radarr:latest
@@ -47,13 +39,8 @@ services:
     volumes:
       - ./radarr:/config
       - ./media:/media
-    ports:
-      - "7878:7878"
     restart: unless-stopped
-    networks:
-      - coolify
-    depends_on:
-      - qbittorrent
+    network_mode: host
 
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
@@ -65,11 +52,8 @@ services:
     volumes:
       - ./prowlarr:/config
       - ./media:/media
-    ports:
-      - "9696:9696"
     restart: unless-stopped
-    networks:
-      - coolify
+    network_mode: host
 
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
@@ -82,13 +66,8 @@ services:
     volumes:
       - ./qbittorrent:/config
       - ./downloads:/downloads
-    ports:
-      - "9080:8080"
-      - "6881:6881"
-      - "6881:6881/udp"
     restart: unless-stopped
-    networks:
-      - coolify
+    network_mode: host
 
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
@@ -100,11 +79,8 @@ services:
     volumes:
       - ./bazarr:/config
       - ./media:/media
-    ports:
-      - "6767:6767"
     restart: unless-stopped
-    networks:
-      - coolify
+    network_mode: host
 
   seerr:
     image: ghcr.io/seerr-team/seerr:latest
@@ -115,15 +91,5 @@ services:
       - TZ=Europe/Amsterdam
     volumes:
       - ./seerr:/app/config
-    ports:
-      - "4535:4535"
     restart: unless-stopped
-    networks:
-      - coolify
-    depends_on:
-      - jellyfin
-
-networks:
-  coolify:
-    name: coolify
-    external: true
+    network_mode: host
