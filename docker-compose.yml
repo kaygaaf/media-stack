@@ -93,15 +93,15 @@ services:
       - "6767:6767"
     restart: unless-stopped
 
-  jellyseerr:
-    image: lscr.io/linuxserver/jellyseerr:latest
-    container_name: jellyseerr
+  seerr:
+    image: ghcr.io/seerr-team/seerr:latest
+    container_name: seerr
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Amsterdam
     volumes:
-      - ./jellyseerr:/config
+      - ./seerr:/app/config
     ports:
       - "4535:4535"
     depends_on:

@@ -9,7 +9,7 @@
 | Prowlarr | 9696 | Indexer management |
 | qBittorrent | 8080 | Download client |
 | Bazarr | 6767 | Subtitle management |
-| Jellyseerr | 4535 | Request management UI |
+| Seerr | 4535 | Request management UI |
 
 ## Folder Structure
 ```
