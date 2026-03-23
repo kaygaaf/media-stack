@@ -1,30 +1,9 @@
 # Media Server Stack for Coolify
-# Jellyfin + Sonarr + Radarr + Prowlarr + qBittorrent + Bazarr + Seerr + Caddy
+# Services: Jellyfin, Sonarr, Radarr, Prowlarr, qBittorrent, Bazarr, Seerr
+# Proxy: Use Coolify's built-in nginx (no Caddy needed)
+# Set env vars in Coolify: JELLYFIN_PUBLISHED_URL, JELLYFIN_HOST
 
 services:
-  caddy:
-    image: caddy:2-alpine
-    container_name: caddy
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./caddy_data:/data
-    restart: unless-stopped
-    networks:
-      - proxy
-    command: >
-      sh -c "cat > /etc/caddy/Caddyfile << 'EOF'
-      {$JELLYFIN_DOMAIN} { reverse_proxy jellyfin:8096 }
-      {$SONARR_DOMAIN} { reverse_proxy sonarr:8989 }
-      {$RADARR_DOMAIN} { reverse_proxy radarr:7878 }
-      {$PROWLARR_DOMAIN} { reverse_proxy prowlarr:9696 }
-      {$QBITTORRENT_DOMAIN} { reverse_proxy qbittorrent:9080 }
-      {$BAZARR_DOMAIN} { reverse_proxy bazarr:6767 }
-      {$SEERR_DOMAIN} { reverse_proxy seerr:4535 }
-      EOF
-      caddy run --config /etc/caddy/Caddyfile --adapter caddyfile"
-
   jellyfin:
     image: lscr.io/linuxserver/jellyfin:latest
     container_name: jellyfin
@@ -32,15 +11,15 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/Amsterdam}
-      - JELLYFIN_PublishedServerUrl=${JELLYFIN_URL:-http://localhost:8096}
+      - JELLYFIN_PublishedServerUrl=${JELLYFIN_PUBLISHED_URL}
     volumes:
       - ./jellyfin:/config
       - ./media:/media
+    ports:
+      - "8096:8096"
     restart: unless-stopped
     networks:
       - proxy
-    ports:
-      - "8096:8096"
 
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
@@ -52,6 +31,8 @@ services:
     volumes:
       - ./sonarr:/config
       - ./media:/media
+    ports:
+      - "8989:8989"
     restart: unless-stopped
     networks:
       - proxy
@@ -68,6 +49,8 @@ services:
     volumes:
       - ./radarr:/config
       - ./media:/media
+    ports:
+      - "7878:7878"
     restart: unless-stopped
     networks:
       - proxy
@@ -84,6 +67,8 @@ services:
     volumes:
       - ./prowlarr:/config
       - ./media:/media
+    ports:
+      - "9696:9696"
     restart: unless-stopped
     networks:
       - proxy
@@ -99,13 +84,13 @@ services:
     volumes:
       - ./qbittorrent:/config
       - ./downloads:/downloads
-    restart: unless-stopped
-    networks:
-      - proxy
     ports:
       - "9080:8080"
       - "6881:6881"
       - "6881:6881/udp"
+    restart: unless-stopped
+    networks:
+      - proxy
 
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
@@ -130,6 +115,8 @@ services:
       - TZ=${TZ:-Europe/Amsterdam}
     volumes:
       - ./seerr:/app/config
+    ports:
+      - "4535:4535"
     restart: unless-stopped
     networks:
       - proxy
