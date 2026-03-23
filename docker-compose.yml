@@ -1,6 +1,5 @@
 # Media Server Stack for Coolify
 # Services: Jellyfin, Sonarr, Radarr, Prowlarr, qBittorrent, Bazarr, Seerr
-# Using host network so services detect public URL from Host header directly
 
 services:
   jellyfin:
@@ -10,6 +9,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/Amsterdam}
+      - JELLYFIN_PublishedServerUrl=${JELLYFIN_URL:-https://jf.vandijk.one}
     volumes:
       - ./jellyfin:/config
       - ./media:/media
