@@ -9,10 +9,20 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./Caddyfile.data:/etc/caddy/Caddyfile:ro
       - ./caddy_data:/data
     network_mode: host
     restart: unless-stopped
+    command: >
+      sh -c "cat > /etc/caddy/Caddyfile << 'EOF'
+      {$JELLYFIN_DOMAIN} { reverse_proxy localhost:8096 }
+      {$SONARR_DOMAIN} { reverse_proxy localhost:8989 }
+      {$RADARR_DOMAIN} { reverse_proxy localhost:7878 }
+      {$PROWLARR_DOMAIN} { reverse_proxy localhost:9696 }
+      {$QBITTORRENT_DOMAIN} { reverse_proxy localhost:9080 }
+      {$BAZARR_DOMAIN} { reverse_proxy localhost:6767 }
+      {$SEERR_DOMAIN} { reverse_proxy localhost:4535 }
+      EOF
+      caddy run --config /etc/caddy/Caddyfile --adapter caddyfile"
 
   jellyfin:
     image: lscr.io/linuxserver/jellyfin:latest
