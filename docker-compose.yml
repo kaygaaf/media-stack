@@ -9,7 +9,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./Caddyfile.data:/etc/caddy/Caddyfile:ro
       - ./caddy_data:/data
     network_mode: host
     restart: unless-stopped
@@ -21,7 +21,6 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Amsterdam
-      - JELLYFIN_PublishedServerUrl=https://jf.vandijk.one
     volumes:
       - ./jellyfin:/config
       - ./media:/media

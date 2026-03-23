@@ -1,0 +1,13 @@
+# Keep these private — contains your actual domain config
+.env
+Caddyfile
+caddy_data/
+jellyfin/
+sonarr/
+radarr/
+prowlarr/
+qbittorrent/
+bazarr/
+seerr/
+media/
+downloads/
