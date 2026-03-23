@@ -1,7 +1,19 @@
 # Media Server Stack for Coolify
-# Jellyfin + Sonarr + Radarr + Prowlarr + qBittorrent + Bazarr + Jellyseerr
+# Jellyfin + Sonarr + Radarr + Prowlarr + qBittorrent + Bazarr + Seerr + Caddy
 
 services:
+  caddy:
+    image: caddy:2-alpine
+    container_name: caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./caddy_data:/data
+    network_mode: host
+    restart: unless-stopped
+
   jellyfin:
     image: lscr.io/linuxserver/jellyfin:latest
     container_name: jellyfin
@@ -9,11 +21,11 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Amsterdam
+      - JELLYFIN_PublishedServerUrl=https://jf.vandijk.one
     volumes:
       - ./jellyfin:/config
       - ./media:/media
-    ports:
-      - "8096:8096"
+    network_mode: host
     restart: unless-stopped
 
   sonarr:
@@ -26,10 +38,7 @@ services:
     volumes:
       - ./sonarr:/config
       - ./media:/media
-    ports:
-      - "8989:8989"
-    depends_on:
-      - qbittorrent
+    network_mode: host
     restart: unless-stopped
 
   radarr:
@@ -42,10 +51,7 @@ services:
     volumes:
       - ./radarr:/config
       - ./media:/media
-    ports:
-      - "7878:7878"
-    depends_on:
-      - qbittorrent
+    network_mode: host
     restart: unless-stopped
 
   prowlarr:
@@ -58,8 +64,7 @@ services:
     volumes:
       - ./prowlarr:/config
       - ./media:/media
-    ports:
-      - "9696:9696"
+    network_mode: host
     restart: unless-stopped
 
   qbittorrent:
@@ -73,10 +78,7 @@ services:
     volumes:
       - ./qbittorrent:/config
       - ./downloads:/downloads
-    ports:
-      - "9080:8080"
-      - "6881:6881"
-      - "6881:6881/udp"
+    network_mode: host
     restart: unless-stopped
 
   bazarr:
@@ -89,8 +91,7 @@ services:
     volumes:
       - ./bazarr:/config
       - ./media:/media
-    ports:
-      - "6767:6767"
+    network_mode: host
     restart: unless-stopped
 
   seerr:
@@ -102,8 +103,5 @@ services:
       - TZ=Europe/Amsterdam
     volumes:
       - ./seerr:/app/config
-    ports:
-      - "4535:4535"
-    depends_on:
-      - jellyfin
+    network_mode: host
     restart: unless-stopped

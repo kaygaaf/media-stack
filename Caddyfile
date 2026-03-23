@@ -1,0 +1,30 @@
+# Reverse proxy for media stack
+# All traffic comes through Cloudflare (SSL terminated at Cloudflare)
+
+jf.vandijk.one {
+    reverse_proxy localhost:8096
+}
+
+tn11egkgjmfboydd2wu6uhyh.vandijk.one {
+    reverse_proxy localhost:8989
+}
+
+tkwvx21w8wjhbj713pck2hfd.vandijk.one {
+    reverse_proxy localhost:7878
+}
+
+xe1vbbe8qsbauqg9mubguhv4.vandijk.one {
+    reverse_proxy localhost:9696
+}
+
+qwv1tsu40dl0jv39jxyeoudo.vandijk.one {
+    reverse_proxy localhost:9080
+}
+
+tk5o9k70ek0bkznk9hpke6yg.vandijk.one {
+    reverse_proxy localhost:6767
+}
+
+gids.vandijk.one {
+    reverse_proxy localhost:5055
+}
