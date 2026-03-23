@@ -1,6 +1,5 @@
 # Media Server Stack for Coolify
-# Multi-service with separate domains per service
-# Key: bridge network + coolify external network (NOT host mode)
+# bridge network + coolify external network for Traefik routing
 
 services:
   jellyfin:
@@ -13,8 +12,9 @@ services:
     volumes:
       - ./jellyfin:/config
       - ./media:/media
+    ports:
+      - "8096:8096"
     restart: unless-stopped
-    network_mode: bridge
     networks:
       - coolify
 
@@ -28,8 +28,9 @@ services:
     volumes:
       - ./sonarr:/config
       - ./media:/media
+    ports:
+      - "8989:8989"
     restart: unless-stopped
-    network_mode: bridge
     networks:
       - coolify
     depends_on:
@@ -45,8 +46,9 @@ services:
     volumes:
       - ./radarr:/config
       - ./media:/media
+    ports:
+      - "7878:7878"
     restart: unless-stopped
-    network_mode: bridge
     networks:
       - coolify
     depends_on:
@@ -62,8 +64,9 @@ services:
     volumes:
       - ./prowlarr:/config
       - ./media:/media
+    ports:
+      - "9696:9696"
     restart: unless-stopped
-    network_mode: bridge
     networks:
       - coolify
 
@@ -78,8 +81,11 @@ services:
     volumes:
       - ./qbittorrent:/config
       - ./downloads:/downloads
+    ports:
+      - "9080:8080"
+      - "6881:6881"
+      - "6881:6881/udp"
     restart: unless-stopped
-    network_mode: bridge
     networks:
       - coolify
 
@@ -94,22 +100,21 @@ services:
       - ./bazarr:/config
       - ./media:/media
     restart: unless-stopped
-    network_mode: bridge
     networks:
       - coolify
 
   seerr:
     image: ghcr.io/seerr-team/seerr:latest
     container_name: seerr
-    init: true
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Amsterdam
     volumes:
       - ./seerr:/app/config
+    ports:
+      - "4535:4535"
     restart: unless-stopped
-    network_mode: bridge
     networks:
       - coolify
     depends_on:
