@@ -1,15 +1,13 @@
-# Media Server Stack for Coolify
-# Services: Jellyfin, Sonarr, Radarr, Prowlarr, qBittorrent, Bazarr, Seerr
+# Media Server Stack — individual deployment on Coolify
+# Each service: network_mode: host, so they talk over localhost
 
 services:
   jellyfin:
     image: lscr.io/linuxserver/jellyfin:latest
-    container_name: jellyfin
     environment:
-      - PUID=${PUID:-1000}
-      - PGID=${PGID:-1000}
-      - TZ=${TZ:-Europe/Amsterdam}
-      - JELLYFIN_PublishedServerUrl=${JELLYFIN_URL}
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Amsterdam
     volumes:
       - ./jellyfin:/config
       - ./media:/media
@@ -18,11 +16,10 @@ services:
 
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
-    container_name: sonarr
     environment:
-      - PUID=${PUID:-1000}
-      - PGID=${PGID:-1000}
-      - TZ=${TZ:-Europe/Amsterdam}
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Amsterdam
     volumes:
       - ./sonarr:/config
       - ./media:/media
@@ -33,11 +30,10 @@ services:
 
   radarr:
     image: lscr.io/linuxserver/radarr:latest
-    container_name: radarr
     environment:
-      - PUID=${PUID:-1000}
-      - PGID=${PGID:-1000}
-      - TZ=${TZ:-Europe/Amsterdam}
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Amsterdam
     volumes:
       - ./radarr:/config
       - ./media:/media
@@ -48,11 +44,10 @@ services:
 
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
-    container_name: prowlarr
     environment:
-      - PUID=${PUID:-1000}
-      - PGID=${PGID:-1000}
-      - TZ=${TZ:-Europe/Amsterdam}
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Amsterdam
     volumes:
       - ./prowlarr:/config
       - ./media:/media
@@ -61,11 +56,10 @@ services:
 
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
-    container_name: qbittorrent
     environment:
-      - PUID=${PUID:-1000}
-      - PGID=${PGID:-1000}
-      - TZ=${TZ:-Europe/Amsterdam}
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Amsterdam
       - WEBUI_PORT=8080
     volumes:
       - ./qbittorrent:/config
@@ -75,11 +69,10 @@ services:
 
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
-    container_name: bazarr
     environment:
-      - PUID=${PUID:-1000}
-      - PGID=${PGID:-1000}
-      - TZ=${TZ:-Europe/Amsterdam}
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Amsterdam
     volumes:
       - ./bazarr:/config
       - ./media:/media
@@ -88,12 +81,11 @@ services:
 
   seerr:
     image: ghcr.io/seerr-team/seerr:latest
-    container_name: seerr
     init: true
     environment:
-      - PUID=${PUID:-1000}
-      - PGID=${PGID:-1000}
-      - TZ=${TZ:-Europe/Amsterdam}
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Amsterdam
     volumes:
       - ./seerr:/app/config
     restart: unless-stopped
