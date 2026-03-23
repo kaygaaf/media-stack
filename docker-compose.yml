@@ -9,7 +9,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/Amsterdam}
-      - JELLYFIN_PublishedServerUrl=${JELLYFIN_URL:-https://jf.vandijk.one}
+      - JELLYFIN_PublishedServerUrl=${JELLYFIN_URL}
     volumes:
       - ./jellyfin:/config
       - ./media:/media
