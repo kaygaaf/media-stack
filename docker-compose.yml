@@ -11,7 +11,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/Amsterdam}
-      - JELLYFIN_PublishedServerUrl=${JELLYFIN_URL}
+      - JELLYFIN_PublishedServerUrl=${SERVICE_URL_JELLYFIN}
     volumes:
       - ./jellyfin:/config
       - ./media:/media
@@ -28,7 +28,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/Amsterdam}
-      - SONARR_APPLICATION_URL=${SONARR_URL}
+      - SONARR_APPLICATION_URL=${SERVICE_URL_SONARR}
     volumes:
       - ./sonarr:/config
       - ./media:/media
@@ -47,7 +47,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/Amsterdam}
-      - RADARR_APPLICATION_URL=${RADARR_URL}
+      - RADARR_APPLICATION_URL=${SERVICE_URL_RADARR}
     volumes:
       - ./radarr:/config
       - ./media:/media
@@ -101,7 +101,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/Amsterdam}
-      - BAZARR_APPLICATION_URL=${BAZARR_URL}
+      - BAZARR_APPLICATION_URL=${SERVICE_URL_BAZARR}
     volumes:
       - ./bazarr:/config
       - ./media:/media
@@ -116,7 +116,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/Amsterdam}
-      - SEERR_APPLICATION_URL=${SEERR_URL}
+      - SEERR_APPLICATION_URL=${SERVICE_URL_SEERR}
     volumes:
       - ./seerr:/app/config
     ports:
