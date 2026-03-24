@@ -92,6 +92,8 @@ services:
       - coolify
     depends_on:
       - jellyfin
+    labels:
+      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
 
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
