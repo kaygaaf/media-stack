@@ -1,5 +1,5 @@
 # Media Server Stack for Coolify
-# Using coolify network - all services on same Docker network as Traefik
+# All services on coolify network for Traefik routing
 
 services:
   jellyfin:
@@ -19,8 +19,6 @@ services:
     restart: unless-stopped
     networks:
       - coolify
-    depends_on:
-      - qbittorrent
 
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
@@ -123,6 +121,7 @@ services:
       - coolify
     depends_on:
       - jellyfin
+    user: "1000:1000"
 
 networks:
   coolify:
