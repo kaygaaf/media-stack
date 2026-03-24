@@ -83,8 +83,15 @@ services:
     volumes:
       - ./qbittorrent:/config
       - ./downloads:/downloads
+    ports:
+      - "9080:8080"
+      - "6881:6881"
+      - "6881:6881/udp"
     restart: unless-stopped
-    network_mode: host
+    networks:
+      - coolify
+    depends_on:
+      - jellyfin
 
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
