@@ -83,14 +83,8 @@ services:
     volumes:
       - ./qbittorrent:/config
       - ./downloads:/downloads
-    ports:
-      - "9080:8080"
-      - "6881:6881"
-      - "6881:6881/udp"
     restart: unless-stopped
-    networks:
-      - coolify
-      - mpvpfh8jn5fznjxafbult0k9
+    network_mode: host
 
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
