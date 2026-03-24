@@ -9,8 +9,8 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Amsterdam
-      - JELLYFIN_PublishedServerUrl=${SERVICE_URL_JELLYFIN:-https://jf.vandijk.one/}
-      - TRUSTED_PROXY_ADDRESSES=10.0.0.1
+      - JELLYFIN_PublishedServerUrl=${SERVICE_URL_JELLYFIN:-https://jf.vandijk.one}
+      - TRUSTED_PROXY_ADDRESSES=10.0.0.1,10.0.1.21,65.108.128.89
     volumes:
       - ./jellyfin:/config
       - ./media:/media
