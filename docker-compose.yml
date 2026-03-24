@@ -90,6 +90,7 @@ services:
     restart: unless-stopped
     networks:
       - coolify
+      - mpvpfh8jn5fznjxafbult0k9
 
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
@@ -115,7 +116,7 @@ services:
     volumes:
       - ./seerr:/app/config
     ports:
-      - "4535:4535"
+      - "4535:5055"
     restart: unless-stopped
     networks:
       - coolify
