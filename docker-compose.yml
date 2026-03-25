@@ -56,6 +56,23 @@ services:
     depends_on:
       - qbittorrent
 
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Amsterdam
+      - LOG_LEVEL=info
+      - LOG_HTML=false
+      - CAPTCHA_SOLVER=none
+      - CAPTCHA_SOLVER_EXTERNAL_URL=null
+    ports:
+      - "8191:8191"
+    restart: unless-stopped
+    networks:
+      - coolify
+
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
@@ -71,6 +88,8 @@ services:
     restart: unless-stopped
     networks:
       - coolify
+    depends_on:
+      - flaresolverr
 
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
